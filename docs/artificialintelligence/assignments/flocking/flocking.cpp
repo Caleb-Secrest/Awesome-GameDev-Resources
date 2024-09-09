@@ -101,7 +101,26 @@ struct Cohesion {
   Cohesion() = default;
 
   Vector2 ComputeForce(const vector<Boid>& boids, int boidAgentIndex) {
-    return {};
+    Vector2 centerOfMass = {0, 0};
+    int count = 0;
+
+    for (int i = 0; i < boids.size(); i++) {
+      if (i != boidAgentIndex) {
+        double dist = (boids[i].position - boids[boidAgentIndex].position).getMagnitude();
+        if (dist <= radius) {
+          centerOfMass += boids[i].position;
+          count++;
+        }
+      }
+    }
+
+    if (count > 0) {
+      centerOfMass /= count;
+      Vector2 cohesionForce = (centerOfMass - boids[boidAgentIndex].position).normalized();
+      return cohesionForce * k;
+    }
+
+    return {0, 0};
   }
 };
 
@@ -112,7 +131,27 @@ struct Alignment {
   Alignment() = default;
 
   Vector2 ComputeForce(const vector<Boid>& boids, int boidAgentIndex) {
-    return {};
+    Vector2 averageVelocity = {0, 0};
+    int count = 0;
+
+
+    for (int i = 0; i < boids.size(); i++) {
+      if (i != boidAgentIndex) {
+        double dist = (boids[i].position - boids[boidAgentIndex].position).getMagnitude();
+        if (dist <= radius) {
+          averageVelocity += boids[i].velocity;
+          count++;
+        }
+      }
+    }
+
+    if (count > 0) {
+      averageVelocity /= count;
+      Vector2 alignmentForce = (averageVelocity - boids[boidAgentIndex].velocity).normalized();
+      return alignmentForce * k;
+    }
+
+    return {0, 0};
   }
 };
 
@@ -124,7 +163,27 @@ struct Separation {
   Separation() = default;
 
   Vector2 ComputeForce(const vector<Boid>& boids, int boidAgentIndex) {
-    return {};
+    Vector2 separationForce = {0, 0};
+    int count = 0;
+
+
+    for (int i = 0; i < boids.size(); i++) {
+      if (i != boidAgentIndex) {
+        double dist = (boids[i].position - boids[boidAgentIndex].position).getMagnitude();
+        if (dist <= radius && dist > 0) {
+          Vector2 direction = (boids[boidAgentIndex].position - boids[i].position).normalized();
+          separationForce += direction / dist;
+          count++;
+        }
+      }
+    }
+
+    if (count > 0) {
+      separationForce = separationForce.normalized() * maxForce;
+      return separationForce * k;
+    }
+
+    return {0, 0};
   }
 };
 
@@ -181,7 +240,7 @@ int main() {
     for (int i = 0; i < numberOfBoids; i++) // for every boid
     {
       newState[i].velocity += allForces[i] * deltaT;
-      newState[i].position += currentState[i].velocity * deltaT;
+      newState[i].position += newState[i].velocity * deltaT;
       cout << newState[i].position.x << " " << newState[i].position.y << " "
            << newState[i].velocity.x << " " << newState[i].velocity.y << endl;
     }
