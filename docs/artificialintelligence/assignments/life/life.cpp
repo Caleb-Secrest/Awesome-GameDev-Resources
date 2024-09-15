@@ -1,12 +1,9 @@
 #include <iostream>
 #include <string>
 
-// Life Function Algorithm
+// Life Algorithm
 struct Life {
-  std::string* worldGrid;
-  int column;
-  int row;
-
+public:
   // Constructor
   Life() : worldGrid(nullptr), column(0), row(0) {}
 
@@ -23,22 +20,6 @@ struct Life {
     for (int i = 0; i < row; i++) {
       worldGrid[i] = grid[i];
     }
-  }
-
-  // Checks the eight neighbors to see how many are alive and returns that number
-  int CheckNeightbors(int x, int y) {
-    int liveNeighbors = 0;
-    int directions[8][2] = { {-1, -1}, {-1, 0}, {-1, 1},{ 0, -1},{ 0, 1}, { 1, -1}, { 1, 0}, { 1, 1} };
-
-    // Checks to see if each neighbor is alive and keeps track of the total
-    for (auto& dir : directions) {
-      int nx = (x + dir[0] + row) % row;
-      int ny = (y + dir[1] + column) % column;
-      if (worldGrid[nx][ny] == '#') {
-        liveNeighbors++;
-      }
-    }
-    return liveNeighbors;
   }
 
   // Updates the grid by one turn and changes each cell acordingly based on living neighbors
@@ -69,6 +50,32 @@ struct Life {
     delete[] worldGrid;
     worldGrid = newGrid;
   }
+
+  // Returns the cell to be printed
+  std::string GameWorld(int r) {
+    return worldGrid[r];
+  }
+
+private:
+  std::string* worldGrid;
+  int column;
+  int row;
+
+  // Checks the eight neighbors to see how many are alive and returns that number
+  int CheckNeightbors(int x, int y) {
+    int liveNeighbors = 0;
+    int directions[8][2] = { {-1, -1}, {-1, 0}, {-1, 1},{ 0, -1},{ 0, 1}, { 1, -1}, { 1, 0}, { 1, 1} };
+
+    // Checks to see if each neighbor is alive and keeps track of the total
+    for (auto& dir : directions) {
+      int nx = (x + dir[0] + row) % row;
+      int ny = (y + dir[1] + column) % column;
+      if (worldGrid[nx][ny] == '#') {
+        liveNeighbors++;
+      }
+    }
+    return liveNeighbors;
+  }
 };
 
 int main() {
@@ -97,8 +104,11 @@ int main() {
 
   // Prints out the new grid with updated cells
   for (int i = 0; i < row; i++) {
-    std::cout << life.worldGrid[i] << std::endl;
+    std::cout << life.GameWorld(i) << std::endl;
   }
+
+  // Deconstructs life to help clear memory
+  life.~Life();
 
   return 0;
 }
