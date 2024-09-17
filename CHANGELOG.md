@@ -1,3 +1,17 @@
+## [1.20.20](https://github.com/InfiniBrains/Awesome-GameDev-Resources/compare/v1.20.19...v1.20.20) (2024-09-16)
+
+
+### Bug Fixes
+
+* remove maze ([e37b27d](https://github.com/InfiniBrains/Awesome-GameDev-Resources/commit/e37b27db387c1f2082bdc3b0041156410496d93c))
+
+## [1.20.19](https://github.com/InfiniBrains/Awesome-GameDev-Resources/compare/v1.20.18...v1.20.19) (2024-09-16)
+
+
+### Bug Fixes
+
+* remove rng solutions ([80c759a](https://github.com/InfiniBrains/Awesome-GameDev-Resources/commit/80c759ada0a3e8d094d30733a5ece3a552d1fcdf))
+
 ## [1.20.18](https://github.com/InfiniBrains/Awesome-GameDev-Resources/compare/v1.20.17...v1.20.18) (2024-09-09)
 
 
