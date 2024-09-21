@@ -37,8 +37,10 @@ int main(){
       for (unsigned int i = 0; i < N; i++) {
         unsigned int randomNumber = middleSquareMethod(seed, min, max);
         std::cout << randomNumber << std::endl;
+        seed = randomNumber;
       }
     break;
+
   }
 
   return 0;
@@ -107,5 +109,22 @@ unsigned int mersenneTwister(unsigned int& seed, int r1, int r2) {
 
 
 unsigned int middleSquareMethod(unsigned int seed, int r1, int r2) {
-  return 0;
+  const int numDigits = 4;
+  const int totalDigits = 8;
+  unsigned long long squared = static_cast<unsigned long long>(seed) * seed;
+  std::string squaredStr = std::to_string(squared);
+
+  if (squaredStr.length() < totalDigits) {
+    squaredStr.insert(0, totalDigits - squaredStr.length(), '0');
+  }
+
+  int start = (squaredStr.length() - numDigits) / 2;
+  std::string middleDigits = squaredStr.substr(start, numDigits);
+  seed = std::stoul(middleDigits);
+
+  int min_value = std::min(r1, r2);
+  int max_value = std::max(r1, r2);
+  unsigned int finalResult = min_value + (seed % (max_value - min_value + 1));
+
+  return finalResult;
 }
